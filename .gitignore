@@ -1,3 +1,6 @@
+/web/uploads
+/web/uploads/thumbnails
+
 # phpstorm project files
 .idea
 
