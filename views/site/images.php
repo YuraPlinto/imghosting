@@ -27,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'name',
-                'label' => 'Название файла'
+                'label' => 'Название файла',
+                'format' => 'html',
+                'value' => function ($data) {
+                    return $data->name . "<br><a href='download/" . $data->name . "'>Скачать архив</a>";
+                }
             ],
             [
                 'attribute' => 'uploaded_at',

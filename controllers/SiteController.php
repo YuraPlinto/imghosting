@@ -118,8 +118,6 @@ class SiteController extends Controller
 
     /**
      * Displays list of all images on server.
-     *
-     *
      */
     public function actionImages()
     {
@@ -139,5 +137,33 @@ class SiteController extends Controller
         return $this->render('images', [
             'dataProvider' => $dataProvider
         ]);
+    }
+
+    /**
+     * Проверяет, существует ли файл с заархивированным изображением.
+     * Если архив уже хранится на сервере, он отдаётся клиенту.
+     * Если архив не существует, то он создаётся.
+     *
+     * TODO: Нужна обработка ошибки, которая возникает, когда файла с именем
+     * $fileName не существует.
+     *
+     * @param  $string $fileName
+     * @return Response
+     */
+    public function actionDownload($fileName) {
+        $fileBaseName = mb_strstr($fileName, '.', true);
+        $fileWithPath = \Yii::getAlias('@webroot/uploads/' . $fileName);
+        $archiveFileWithPath = \Yii::getAlias('@webroot/uploads/archive/' . $fileBaseName . '.zip');
+
+        // Если файл с архивированным изображением не существует - создаём его
+        if (!file_exists($archiveFileWithPath)) {
+            $zip = new \ZipArchive();
+            $zip->open($archiveFileWithPath, \ZIPARCHIVE::CREATE);
+            $zip->addFromString($fileName, file_get_contents($fileWithPath));
+            $zip->close();
+        }
+
+        if (file_exists($archiveFileWithPath))
+            \Yii::$app->response->sendFile($archiveFileWithPath);
     }
 }

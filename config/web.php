@@ -49,6 +49,7 @@ $config = [
             'rules' => [
                  ''=>'site/index',
                  '<action>'=>'site/<action>',
+                 'download/<fileName:\S+>'=>'site/download'
              ],
         ]
     ],
