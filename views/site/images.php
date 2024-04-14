@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             [
-                'attribute' => 'name',
                 'label' => 'Превью',
                 'format' => 'html',
                 'contentOptions' => ['style' => 'width: 200px;'],
