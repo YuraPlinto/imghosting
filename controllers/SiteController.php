@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-//use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
