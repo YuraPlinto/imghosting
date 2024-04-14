@@ -128,6 +128,12 @@ class SiteController extends Controller
             'query' => Image::find(),
             'pagination' => [
                 'pageSize' => 20,
+            ],
+            'sort' => [
+                'attributes' => [
+                    'name',
+                    'uploaded_at'
+                ]
             ]
         ]);
 
