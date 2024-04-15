@@ -26,21 +26,19 @@ $this->title = 'Manage images';
                 'label' => 'Название файла'
             ],
             [
-                'label' => 'Файл существует',
-                'value' => function ($data) {
-                    $fileWithPath = \Yii::getAlias('@webroot/uploads/' . $data->name);
-                    if (file_exists($fileWithPath))
-                        return 'Да';
-                    else
-                        return 'Нет';
-                }
-            ],
-            [
                 'label' => 'Изображение',
                 'format' => 'html',
                 'contentOptions' => ['style' => 'width: 200px;'],
                 'value' => function ($data) {
+                    $originalFileWithPath = \Yii::getAlias('@webroot/uploads/' . $data->name);
+                    if (!file_exists($originalFileWithPath))
+                        return 'Файл не существует';
+
                     $fileBaseName = mb_strstr($data->name, '.', true);
+                    $thumbnailFileWithPath = \Yii::getAlias('@webroot/uploads/thumbnails/' . $fileBaseName . '.png');
+                    if (!file_exists($thumbnailFileWithPath))
+                        ;
+
                     $href = '/uploads/' . $data->name;
                     $previewImgTag = Html::img('@web/uploads/thumbnails/' . $fileBaseName . '.png', ['alt' => 'превью']);
                     return \sprintf("<a href='%s'>%s</a>", $href, $previewImgTag);
