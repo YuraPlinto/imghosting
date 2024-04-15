@@ -13,7 +13,7 @@ $this->title = 'Manage images';
         <b>Количество записей о файлах в БД:</b> <?= $imageInDbQuantity ?><br>
         <b>Количество загруженных файлов в папке uploads:</b> <?= $imageFilesQuantity ?>
     </div>
-    <h2>Файлы в базе данных</h2>
+    <h2>Записи о загруженных файлах в базе данных</h2>
     <?php
     echo GridView::widget([
         'dataProvider' => $dataProvider,
