@@ -9,7 +9,6 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\Image;
-use app\models\LoginForm;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
 
