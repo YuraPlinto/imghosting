@@ -34,6 +34,7 @@ class AdminController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
+                    'delete' => ['post']
                 ],
             ],
         ];
@@ -110,8 +111,11 @@ class AdminController extends Controller
         ]);
     }
 
-    public function actionDelete()
+    public function actionDelete($id)
     {
-        ;
+        $image = Image::findOne($id);
+        $image->delete();
+
+        return $this->redirect('/admin/index', 303);
     }
 }
