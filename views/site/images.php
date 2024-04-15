@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 $this->title = 'Images';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-images">
     <p>Чтобы открыть картинку, кликните по превью.</p>
