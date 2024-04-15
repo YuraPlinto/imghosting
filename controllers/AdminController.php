@@ -21,10 +21,10 @@ class AdminController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'logout'],
+                'only' => ['index', 'logout', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -37,6 +37,18 @@ class AdminController extends Controller
                     'delete' => ['post']
                 ],
             ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction'
+            ]
         ];
     }
 
