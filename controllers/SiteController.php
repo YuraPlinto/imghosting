@@ -72,10 +72,17 @@ class SiteController extends Controller
                 // file is uploaded successfully
                 return $this->render('index', ['imageUrls' => $model->uploadedUrls]);
             } else {
-                // TODO: произошла ошибка при загрузке картинок. Нужно вывести сообщение об этом.
-                // При этом нужно различать ситуации, когда не удалось загрузить ни одной картинки,
-                // и когда удалось загрузить часть изображений. Во втором случае нужно вывести
-                // URL картинок, которые удалось сохранить на сервере.
+                $errorMessage = 'Ошибка!';
+                if (\count($model->uploadedUrls) >= 1) {
+                    $errorMessage .= ' Удалось загрузить не все файлы';
+                    return $this->render('index', [
+                        'errorMessage' => $errorMessage,
+                        'imageUrls' => $model->uploadedUrls
+                    ]);
+                } else {
+                    $errorMessage .= ' Файлы загрузить не удалось';
+                    return $this->render('index', ['errorMessage' => $errorMessage]);
+                }
             }
         }
 

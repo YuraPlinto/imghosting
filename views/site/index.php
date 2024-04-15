@@ -53,18 +53,37 @@ $this->title = 'Image hosting';
                 <div class="result-urls-wrapper">
                     <?php
                     $urlQuantity = count($imageUrls);
-                    if($urlQuantity > 1):
-                    ?>
-                        <h2>Изображения успешно загружены!</h2>
-                        <h3>Их URL:</h3>
-                        <ul>
-                            <?php foreach($imageUrls as $imageUrl): ?>
-                                <?= '<li>' . Url::base(true) . '/uploads/' . $imageUrl . '</li>' ?>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php elseif ($urlQuantity == 1): ?>
-                        <h2>Изображение успешно загружено!</h2>
-                        <p><b>Его URL:</b> <?= Url::base(true) . '/uploads/' . $imageUrls[0] ?></p>
+                    if (!isset($errorMessage)):
+                        if($urlQuantity > 1):
+                        ?>
+                            <h2>Изображения успешно загружены!</h2>
+                            <h3>Их URL:</h3>
+                            <ul>
+                                <?php foreach($imageUrls as $imageUrl): ?>
+                                    <?= '<li>' . Url::base(true) . '/uploads/' . $imageUrl . '</li>' ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php elseif ($urlQuantity == 1): ?>
+                            <h2>Изображение успешно загружено!</h2>
+                            <p><b>Его URL:</b> <?= Url::base(true) . '/uploads/' . $imageUrls[0] ?></p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <h2><?= $errorMessage ?></h2>
+                        <?php
+                        if($urlQuantity > 1):
+                        ?>
+                            <h3>Но эти изображения удалось успешно загрузить:</h3>
+                            <ul>
+                                <?php foreach($imageUrls as $imageUrl): ?>
+                                    <?= '<li>' . Url::base(true) . '/uploads/' . $imageUrl . '</li>' ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php elseif ($urlQuantity == 1): ?>
+                            <p>
+                                <b>Но это изображение удалось успешно загрузить:</b><br>
+                                <?= Url::base(true) . '/uploads/' . $imageUrls[0] ?>
+                            </p>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     <p><a class="btn btn-lg btn-success" href=<?= Url::base(true) ?>>Загрузить ещё</a></p>
