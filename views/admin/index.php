@@ -26,6 +26,16 @@ $this->title = 'Manage images';
                 'label' => 'Название файла'
             ],
             [
+                'label' => 'Файл существует',
+                'value' => function ($data) {
+                    $fileWithPath = \Yii::getAlias('@webroot/uploads/' . $data->name);
+                    if (file_exists($fileWithPath))
+                        return 'Да';
+                    else
+                        return 'Нет';
+                }
+            ],
+            [
                 'label' => 'Изображение',
                 'format' => 'html',
                 'contentOptions' => ['style' => 'width: 200px;'],
