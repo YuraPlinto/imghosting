@@ -3,6 +3,7 @@
 /** @var yii\web\View $this */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 
 $this->title = 'Manage images';
@@ -13,6 +14,15 @@ $this->title = 'Manage images';
         <b>Количество записей о файлах в БД:</b> <?= $imageInDbQuantity ?><br>
         <b>Количество загруженных файлов в папке uploads:</b> <?= $imageFilesQuantity ?>
     </div>
+    <p style="margin-bottom: 3em;">
+        <a
+            class="btn btn-lg btn-success"
+            href=<?= Url::base(true) . '/admin/clear' ?>
+            title="Удалить файлы, не связанные с записью в БД, и удалить записи о несуществующих файлах из БД"
+        >
+            Очистка файлов и БД
+        </a>
+    </p>
     <h2>Записи о загруженных файлах в базе данных</h2>
     <?php
     echo GridView::widget([

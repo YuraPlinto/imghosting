@@ -21,10 +21,10 @@ class AdminController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'logout', 'delete'],
+                'only' => ['index', 'logout', 'delete', 'clear'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index', 'delete'],
+                        'actions' => ['logout', 'index', 'delete', 'clear'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -127,6 +127,75 @@ class AdminController extends Controller
     {
         $image = Image::findOne($id);
         $image->delete();
+
+        return $this->redirect('/admin/index', 303);
+    }
+
+    public function actionClear()
+    {
+        $originalFiles = [];
+        $originalFilesWithoutExt = [];
+
+        $uploadsPath = Yii::$app->basePath . '\web\uploads\\';
+        $pos = mb_strlen($uploadsPath);
+        foreach (glob(Yii::$app->basePath . '\web\uploads\*') as $fileNameWithPath) {
+            if (\is_file($fileNameWithPath)) {
+                $fileNameWithoutPath = mb_substr($fileNameWithPath, $pos);
+                $fileNameWithoutPathAndExt = mb_strstr($fileNameWithoutPath, '.', true);
+                $originalFilesWithoutExt[] = $fileNameWithoutPathAndExt;
+                $originalFiles[] = $fileNameWithoutPath;
+            }
+        }
+
+        // Удаляем из папки uploads файлы, о которых нет информации в БД
+        $imagesInDb = Image::find()->all();
+        $imagesInDbNames = [];
+        foreach($imagesInDb as $imageInDb) {
+            $imagesInDbNames[] = $imageInDb->name;
+        }
+        $filesNotInDb = \array_diff($originalFiles, $imagesInDbNames);
+        foreach($filesNotInDb as $file) {
+            unlink($uploadsPath . $file);
+        }
+
+        // Удаляем превью несуществующих изображений (файла с оригиналом изображения нет в папке uploads)
+        $thumbnailsPath = $uploadsPath . 'thumbnails\\';
+        $pos = mb_strlen($thumbnailsPath);
+        $thumbnailFiles = [];
+        foreach(glob(Yii::$app->basePath . '\web\uploads\thumbnails\*') as $fileNameWithPath) {
+            if (\is_file($fileNameWithPath)) {
+                $fileNameWithoutPath = mb_substr($fileNameWithPath, $pos);
+                $fileNameWithoutPathAndExt = mb_strstr($fileNameWithoutPath, '.', true);
+                $thumbnailFiles[] = $fileNameWithoutPathAndExt;
+            }
+        }
+        $thumbnailFilesWithoutOriginal = \array_diff($thumbnailFiles, $originalFilesWithoutExt);
+        foreach($thumbnailFilesWithoutOriginal as $file) {
+            unlink($thumbnailsPath . $file . '.png');
+        }
+
+        // Удаляем архивы несуществующих файлов (оригинала файла нет в папке uploads)
+        $archiveFiles = [];
+        $archivePath = $uploadsPath . 'archive\\';
+        $pos = mb_strlen($archivePath);
+        foreach(glob(Yii::$app->basePath . '\web\uploads\archive\*') as $fileNameWithPath) {
+            if (\is_file($fileNameWithPath)) {
+                $fileNameWithoutPath = mb_substr($fileNameWithPath, $pos);
+                $fileNameWithoutPathAndExt = mb_strstr($fileNameWithoutPath, '.', true);
+                $archiveFiles[] = $fileNameWithoutPathAndExt;
+            }
+        }
+        $archiveFilesWithoutOriginal = \array_diff($archiveFiles, $originalFilesWithoutExt);
+        foreach($archiveFilesWithoutOriginal as $file) {
+            unlink($archivePath . $file . '.zip');
+        }
+
+        // Очистка БД от записей о несуществующих файлах
+        $filenamesInDbWithoutFiles = \array_diff($imagesInDbNames, $originalFiles);
+        foreach($filenamesInDbWithoutFiles as $filename) {
+            $badImage = Image::find()->where(['name' => $filename])->one();
+            $badImage->delete();
+        }
 
         return $this->redirect('/admin/index', 303);
     }
