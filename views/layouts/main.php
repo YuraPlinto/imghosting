@@ -37,7 +37,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
     $menuItems = [
-        ['label' => 'Images', 'url' => ['/site/images']],
+        ['label' => 'Images', 'url' => ['/site/see']],
     ];
 
     if (Yii::$app->user->isGuest) {

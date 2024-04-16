@@ -91,7 +91,7 @@ class SiteController extends Controller
     /**
      * Displays list of all images on server.
      */
-    public function actionImages()
+    public function actionSee()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Image::find(),
